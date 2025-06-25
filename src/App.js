@@ -9,6 +9,7 @@ import CartPage from './Components/CartPage';
 import AddressPage from './Components/AddressPage';
 import Login from './Components/Login';
 import Signup from './Components/Signup';
+import ForgotPassword from './Components/ForgotPassword';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 function App() {
@@ -45,9 +46,9 @@ function App() {
             <Link to="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold', fontSize: 20 }}>Medical Store</Link>
             {/* Navigation Links */}
             <div style={{ display: 'flex', gap: 20 }}>
-              <Link to="/" style={{ color: 'white', textDecoration: 'none', fontWeight: '500' }}>Home</Link>
-              <Link to="/about" style={{ color: 'white', textDecoration: 'none', fontWeight: '500' }}>About</Link>
-              <Link to="/contact" style={{ color: 'white', textDecoration: 'none', fontWeight: '500' }}>Contact</Link>
+               <Link to="/" style={{ color: 'white', textDecoration: 'none', fontWeight: '500' }}>Home</Link>
+               <Link to="/about" style={{ color: 'white', textDecoration: 'none', fontWeight: '500' }}>About</Link>
+               <Link to="/contact" style={{ color: 'white', textDecoration: 'none', fontWeight: '500' }}>Contact</Link>
             </div>
             {/* Search Bar */}
             <input
@@ -146,6 +147,7 @@ function App() {
               </div>
             </div>
           } />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/" element={user ? (
             <>
               <Header />

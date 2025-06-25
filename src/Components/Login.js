@@ -71,6 +71,11 @@ function Login({ onLogin }) {
             }}
           />
         </div>
+        <div style={{ marginBottom: 16, textAlign: 'right' }}>
+          <Link to="/forgot-password" style={{ color: '#388e3c', textDecoration: 'underline', cursor: 'pointer', fontSize: 14 }}>
+            Forgot Password?
+          </Link>
+        </div>
         <button
           type="submit"
           style={{
