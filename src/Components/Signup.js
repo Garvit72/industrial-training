@@ -27,7 +27,7 @@ function Signup({ onSignup }) {
           alert("Signup successful! Please login.");
           navigate("/login");
         } else {
-          setError(data.message || "Signup failed");
+          setError(data.error || "Signup failed");
         }
       } catch (err) {
         setError("Network error");
