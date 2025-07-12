@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ProductReview from "./ProductReview";
 
 const categories = [
   {
@@ -154,127 +155,142 @@ function Categories({ onAddToCart, search }) {
   const anyMatch = filteredCategories.some(cat => cat.medicines && cat.medicines.length > 0);
 
   return (
-    <section style={{ padding: "20px" }}>
-      <h3 style={{ fontSize: "24px", marginBottom: "20px" }}>Shop by Category</h3>
-      <div style={{ display: "flex", flexDirection: "column", gap: "20px", alignItems: "center" }}>
-        {categories.map((cat) => (
-          cat.name === "Medicines" ? (
-            <div key={cat.name} style={{ border: "1px solid #ccc", padding: "20px", width: "100%", maxWidth: "600px", textAlign: "center", background: "#fff", borderRadius: 12, cursor: "pointer", position: "relative" }} onClick={() => setShowMedicines(v => !v)}>
-              <img src={cat.image} alt={cat.name} style={{ width: "100%", height: 150, objectFit: "cover", borderRadius: 8, marginBottom: 12 }} />
-              <div style={{ fontWeight: "bold", fontSize: "18px", marginBottom: "8px" }}>{cat.name}</div>
-              <div style={{ fontSize: 14, color: '#388e3c', margin: '8px 0' }}>{showMedicines ? 'Hide' : 'Show'} Categories ▼</div>
-              {showMedicines && (
-                <div style={{ marginTop: 16, textAlign: 'left', maxHeight: 350, overflowY: 'auto' }}>
+    <div style={{ width: '100%', maxWidth: 900, margin: '0 auto', background: '#f8fcff', borderRadius: 8, boxShadow: '0 2px 8px rgba(25,118,210,0.04)', padding: 8 }}>
+      <section style={{ padding: "6px" }}>
+        <h3 style={{ fontSize: "16px", marginBottom: "8px" }}>Shop by Category</h3>
+        <div style={{ display: "flex", flexDirection: "row", gap: "8px", alignItems: "flex-start", justifyContent: 'center', flexWrap: 'wrap' }}>
+          {categories.map((cat) => (
+            <div
+              key={cat.name}
+              style={{
+                border: "1px solid #ccc",
+                padding: "6px",
+                width: "100%",
+                maxWidth: "260px",
+                textAlign: "center",
+                background: "#fff",
+                borderRadius: 6,
+                cursor: "pointer",
+                position: "relative",
+                marginBottom: 2
+              }}
+              onClick={() => {
+                if (cat.name === "Medicines") setShowMedicines(v => !v);
+                if (cat.name === "Vitamins") setShowVitamins(v => !v);
+                if (cat.name === "Personal Care") setShowPersonalCare(v => !v);
+                if (cat.name === "Baby Care") setShowBabyCare(v => !v);
+                if (cat.name === "Devices") setShowDevices(v => !v);
+                if (cat.name === "First Aid") setShowFirstAid(v => !v);
+              }}
+            >
+              <img src={cat.image} alt={cat.name} style={{ width: "100%", height: 36, objectFit: "cover", borderRadius: 4, marginBottom: 4 }} />
+              <div style={{ fontWeight: "bold", fontSize: "11px", marginBottom: "2px" }}>{cat.name}</div>
+              <div style={{ fontSize: 9, color: '#388e3c', margin: '2px 0' }}>
+                {(() => {
+                  if (cat.name === "Medicines") return showMedicines ? 'Hide' : 'Show';
+                  if (cat.name === "Vitamins") return showVitamins ? 'Hide' : 'Show';
+                  if (cat.name === "Personal Care") return showPersonalCare ? 'Hide' : 'Show';
+                  if (cat.name === "Baby Care") return showBabyCare ? 'Hide' : 'Show';
+                  if (cat.name === "Devices") return showDevices ? 'Hide' : 'Show';
+                  if (cat.name === "First Aid") return showFirstAid ? 'Hide' : 'Show';
+                  return '';
+                })()} {cat.name} ▼
+              </div>
+              {/* Expanded content for each category */}
+              {cat.name === "Medicines" && showMedicines && (
+                <div style={{ marginTop: 4, textAlign: 'left', maxHeight: 80, overflowY: 'auto' }}>
                   {anyMatch ? filteredCategories.map((cat) => (
-                    <div key={cat.name} style={{ marginBottom: 18, borderBottom: '1px solid #eee', paddingBottom: 8 }}>
-                      <div style={{ fontWeight: 'bold', marginBottom: 6 }}>{cat.name}</div>
+                    <div key={cat.name} style={{ marginBottom: 4, borderBottom: '1px solid #eee', paddingBottom: 2 }}>
+                      <div style={{ fontWeight: 'bold', marginBottom: 2, fontSize: 10 }}>{cat.name}</div>
                       {cat.medicines && cat.medicines.map((med) => (
-                        <div key={med.name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                          <span>{med.name} - ₹{med.price}</span>
-                          <button style={{ marginLeft: 8, background: '#4caf50', color: 'white', border: 'none', borderRadius: 4, padding: '2px 8px', cursor: 'pointer' }} onClick={e => { e.stopPropagation(); onAddToCart({ name: med.name, price: `₹${med.price}` }); }}>
-                            Add to Cart
-                          </button>
+                        <div key={med.name} style={{ display: 'flex', flexDirection: 'column', marginBottom: 2, borderBottom: '1px solid #eee', paddingBottom: 2 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2, fontSize: 10 }}>
+                            <span>{med.name} - ₹{med.price}</span>
+                            <button style={{ marginLeft: 3, background: '#4caf50', color: 'white', border: 'none', borderRadius: 2, padding: '0 4px', cursor: 'pointer', fontSize: 9 }} onClick={e => { e.stopPropagation(); onAddToCart({ name: med.name, price: `₹${med.price}` }); }}>
+                              Add
+                            </button>
+                          </div>
                         </div>
                       ))}
                     </div>
-                  )) : <div style={{ color: '#888', fontStyle: 'italic' }}>No medicines found.</div>}
+                  )) : <div style={{ color: '#888', fontStyle: 'italic', fontSize: 9 }}>No medicines found.</div>}
                 </div>
               )}
-            </div>
-          ) : cat.name === "Vitamins" ? (
-            <div key={cat.name} style={{ border: "1px solid #ccc", padding: "20px", width: "100%", maxWidth: "600px", textAlign: "center", background: "#fff", borderRadius: 12, cursor: "pointer", position: "relative" }} onClick={() => setShowVitamins(v => !v)}>
-              <img src={cat.image} alt={cat.name} style={{ width: "100%", height: 150, objectFit: "cover", borderRadius: 8, marginBottom: 12 }} />
-              <div style={{ fontWeight: "bold", fontSize: "18px", marginBottom: "8px" }}>{cat.name}</div>
-              <div style={{ fontSize: 14, color: '#388e3c', margin: '8px 0' }}>{showVitamins ? 'Hide' : 'Show'} Vitamins ▼</div>
-              {showVitamins && (
-                <div style={{ marginTop: 16, textAlign: 'left' }}>
+              {cat.name === "Vitamins" && showVitamins && (
+                <div style={{ marginTop: 4, textAlign: 'left' }}>
                   {vitamins.map((vit) => (
-                    <div key={vit.name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, borderBottom: '1px solid #eee', paddingBottom: 4 }}>
-                      <span>{vit.name} - ₹{vit.price}</span>
-                      <button style={{ marginLeft: 8, background: '#4caf50', color: 'white', border: 'none', borderRadius: 4, padding: '2px 8px', cursor: 'pointer' }} onClick={e => { e.stopPropagation(); onAddToCart({ name: vit.name, price: `₹${vit.price}` }); }}>
-                        Add to Cart
-                      </button>
+                    <div key={vit.name} style={{ display: 'flex', flexDirection: 'column', marginBottom: 2, borderBottom: '1px solid #eee', paddingBottom: 2 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2, fontSize: 10 }}>
+                        <span>{vit.name} - ₹{vit.price}</span>
+                        <button style={{ marginLeft: 3, background: '#4caf50', color: 'white', border: 'none', borderRadius: 2, padding: '0 4px', cursor: 'pointer', fontSize: 9 }} onClick={e => { e.stopPropagation(); onAddToCart({ name: vit.name, price: `₹${vit.price}` }); }}>
+                          Add
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
               )}
-            </div>
-          ) : cat.name === "Personal Care" ? (
-            <div key={cat.name} style={{ border: "1px solid #ccc", padding: "20px", width: "100%", maxWidth: "600px", textAlign: "center", background: "#fff", borderRadius: 12, cursor: "pointer", position: "relative" }} onClick={() => setShowPersonalCare(v => !v)}>
-              <img src={cat.image} alt={cat.name} style={{ width: "100%", height: 150, objectFit: "cover", borderRadius: 8, marginBottom: 12 }} />
-              <div style={{ fontWeight: "bold", fontSize: "18px", marginBottom: "8px" }}>{cat.name}</div>
-              <div style={{ fontSize: 14, color: '#388e3c', margin: '8px 0' }}>{showPersonalCare ? 'Hide' : 'Show'} Products ▼</div>
-              {showPersonalCare && (
-                <div style={{ marginTop: 16, textAlign: 'left' }}>
+              {cat.name === "Personal Care" && showPersonalCare && (
+                <div style={{ marginTop: 4, textAlign: 'left' }}>
                   {personalCareProducts.map((prod) => (
-                    <div key={prod.name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, borderBottom: '1px solid #eee', paddingBottom: 4 }}>
-                      <span>{prod.name} - ₹{prod.price}</span>
-                      <button style={{ marginLeft: 8, background: '#4caf50', color: 'white', border: 'none', borderRadius: 4, padding: '2px 8px', cursor: 'pointer' }} onClick={e => { e.stopPropagation(); onAddToCart({ name: prod.name, price: `₹${prod.price}` }); }}>
-                        Add to Cart
-                      </button>
+                    <div key={prod.name} style={{ display: 'flex', flexDirection: 'column', marginBottom: 2, borderBottom: '1px solid #eee', paddingBottom: 2 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2, fontSize: 10 }}>
+                        <span>{prod.name} - ₹{prod.price}</span>
+                        <button style={{ marginLeft: 3, background: '#4caf50', color: 'white', border: 'none', borderRadius: 2, padding: '0 4px', cursor: 'pointer', fontSize: 9 }} onClick={e => { e.stopPropagation(); onAddToCart({ name: prod.name, price: `₹${prod.price}` }); }}>
+                          Add
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
               )}
-            </div>
-          ) : cat.name === "Baby Care" ? (
-            <div key={cat.name} style={{ border: "1px solid #ccc", padding: "20px", width: "100%", maxWidth: "600px", textAlign: "center", background: "#fff", borderRadius: 12, cursor: "pointer", position: "relative" }} onClick={() => setShowBabyCare(v => !v)}>
-              <img src={cat.image} alt={cat.name} style={{ width: "100%", height: 150, objectFit: "cover", borderRadius: 8, marginBottom: 12 }} />
-              <div style={{ fontWeight: "bold", fontSize: "18px", marginBottom: "8px" }}>{cat.name}</div>
-              <div style={{ fontSize: 14, color: '#388e3c', margin: '8px 0' }}>{showBabyCare ? 'Hide' : 'Show'} Products ▼</div>
-              {showBabyCare && (
-                <div style={{ marginTop: 16, textAlign: 'left' }}>
+              {cat.name === "Baby Care" && showBabyCare && (
+                <div style={{ marginTop: 4, textAlign: 'left' }}>
                   {babyCareProducts.map((prod) => (
-                    <div key={prod.name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, borderBottom: '1px solid #eee', paddingBottom: 4 }}>
-                      <span>{prod.name} - ₹{prod.price}</span>
-                      <button style={{ marginLeft: 8, background: '#4caf50', color: 'white', border: 'none', borderRadius: 4, padding: '2px 8px', cursor: 'pointer' }} onClick={e => { e.stopPropagation(); onAddToCart({ name: prod.name, price: `₹${prod.price}` }); }}>
-                        Add to Cart
-                      </button>
+                    <div key={prod.name} style={{ display: 'flex', flexDirection: 'column', marginBottom: 2, borderBottom: '1px solid #eee', paddingBottom: 2 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2, fontSize: 10 }}>
+                        <span>{prod.name} - ₹{prod.price}</span>
+                        <button style={{ marginLeft: 3, background: '#4caf50', color: 'white', border: 'none', borderRadius: 2, padding: '0 4px', cursor: 'pointer', fontSize: 9 }} onClick={e => { e.stopPropagation(); onAddToCart({ name: prod.name, price: `₹${prod.price}` }); }}>
+                          Add
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
               )}
-            </div>
-          ) : cat.name === "Devices" ? (
-            <div key={cat.name} style={{ border: "1px solid #ccc", padding: "20px", width: "100%", maxWidth: "600px", textAlign: "center", background: "#fff", borderRadius: 12, cursor: "pointer", position: "relative" }} onClick={() => setShowDevices(v => !v)}>
-              <img src={cat.image} alt={cat.name} style={{ width: "100%", height: 150, objectFit: "cover", borderRadius: 8, marginBottom: 12 }} />
-              <div style={{ fontWeight: "bold", fontSize: "18px", marginBottom: "8px" }}>{cat.name}</div>
-              <div style={{ fontSize: 14, color: '#388e3c', margin: '8px 0' }}>{showDevices ? 'Hide' : 'Show'} Devices ▼</div>
-              {showDevices && (
-                <div style={{ marginTop: 16, textAlign: 'left' }}>
+              {cat.name === "Devices" && showDevices && (
+                <div style={{ marginTop: 4, textAlign: 'left' }}>
                   {deviceProducts.map((prod) => (
-                    <div key={prod.name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, borderBottom: '1px solid #eee', paddingBottom: 4 }}>
-                      <span>{prod.name} - ₹{prod.price}</span>
-                      <button style={{ marginLeft: 8, background: '#4caf50', color: 'white', border: 'none', borderRadius: 4, padding: '2px 8px', cursor: 'pointer' }} onClick={e => { e.stopPropagation(); onAddToCart({ name: prod.name, price: `₹${prod.price}` }); }}>
-                        Add to Cart
-                      </button>
+                    <div key={prod.name} style={{ display: 'flex', flexDirection: 'column', marginBottom: 2, borderBottom: '1px solid #eee', paddingBottom: 2 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2, fontSize: 10 }}>
+                        <span>{prod.name} - ₹{prod.price}</span>
+                        <button style={{ marginLeft: 3, background: '#4caf50', color: 'white', border: 'none', borderRadius: 2, padding: '0 4px', cursor: 'pointer', fontSize: 9 }} onClick={e => { e.stopPropagation(); onAddToCart({ name: prod.name, price: `₹${prod.price}` }); }}>
+                          Add
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
               )}
-            </div>
-          ) : cat.name === "First Aid" ? (
-            <div key={cat.name} style={{ border: "1px solid #ccc", padding: "20px", width: "100%", maxWidth: "600px", textAlign: "center", background: "#fff", borderRadius: 12, cursor: "pointer", position: "relative" }} onClick={() => setShowFirstAid(v => !v)}>
-              <img src={cat.image} alt={cat.name} style={{ width: "100%", height: 150, objectFit: "cover", borderRadius: 8, marginBottom: 12 }} />
-              <div style={{ fontWeight: "bold", fontSize: "18px", marginBottom: "8px" }}>{cat.name}</div>
-              <div style={{ fontSize: 14, color: '#388e3c', margin: '8px 0' }}>{showFirstAid ? 'Hide' : 'Show'} Products ▼</div>
-              {showFirstAid && (
-                <div style={{ marginTop: 16, textAlign: 'left' }}>
+              {cat.name === "First Aid" && showFirstAid && (
+                <div style={{ marginTop: 4, textAlign: 'left' }}>
                   {firstAidProducts.map((prod) => (
-                    <div key={prod.name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, borderBottom: '1px solid #eee', paddingBottom: 4 }}>
-                      <span>{prod.name} - ₹{prod.price}</span>
-                      <button style={{ marginLeft: 8, background: '#4caf50', color: 'white', border: 'none', borderRadius: 4, padding: '2px 8px', cursor: 'pointer' }} onClick={e => { e.stopPropagation(); onAddToCart({ name: prod.name, price: `₹${prod.price}` }); }}>
-                        Add to Cart
-                      </button>
+                    <div key={prod.name} style={{ display: 'flex', flexDirection: 'column', marginBottom: 2, borderBottom: '1px solid #eee', paddingBottom: 2 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2, fontSize: 10 }}>
+                        <span>{prod.name} - ₹{prod.price}</span>
+                        <button style={{ marginLeft: 3, background: '#4caf50', color: 'white', border: 'none', borderRadius: 2, padding: '0 4px', cursor: 'pointer', fontSize: 9 }} onClick={e => { e.stopPropagation(); onAddToCart({ name: prod.name, price: `₹${prod.price}` }); }}>
+                          Add
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
               )}
             </div>
-          ) : null
-        ))}
-      </div>
-    </section>
+          ))}
+        </div>
+      </section>
+    </div>
   );
 }
 

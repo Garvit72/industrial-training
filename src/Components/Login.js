@@ -5,14 +5,32 @@ function Login({ onLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (username && password) {
-      setError("");
-      onLogin(username);
-    } else {
+    if (!username || !password) {
       setError("Please enter both username and password.");
+      return;
+    }
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        onLogin(username);
+      } else {
+        setError(data.message || "Login failed");
+      }
+    } catch (err) {
+      setError("Network error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -81,18 +99,31 @@ function Login({ onLogin }) {
           style={{
             width: "100%",
             padding: 12,
-            background: "#43a047",
+            background: loading ? "#a5d6a7" : "#43a047",
             color: "white",
             border: "none",
             borderRadius: 6,
             fontWeight: "bold",
             fontSize: 16,
             marginBottom: 10,
-            cursor: "pointer"
+            cursor: loading ? "not-allowed" : "pointer"
           }}
+          disabled={loading}
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
+        {/* OTP and Social Login */}
+        <button type="button" style={{ width: '100%', padding: 12, background: '#1976d2', color: 'white', border: 'none', borderRadius: 6, fontWeight: 'bold', fontSize: 16, marginBottom: 8, marginTop: 4 }}>
+          Login with OTP
+        </button>
+        <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+          <button type="button" style={{ flex: 1, padding: 10, background: '#fff', color: '#1976d2', border: '1px solid #1976d2', borderRadius: 6, fontWeight: 'bold', fontSize: 15, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" style={{ width: 18, height: 18 }} /> Google
+          </button>
+          <button type="button" style={{ flex: 1, padding: 10, background: '#fff', color: '#1976d2', border: '1px solid #1976d2', borderRadius: 6, fontWeight: 'bold', fontSize: 15, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png" alt="Facebook" style={{ width: 18, height: 18 }} /> Facebook
+          </button>
+        </div>
         <div style={{ textAlign: "center", marginTop: 10 }}>
           Don't have an account? <Link to="/signup" style={{ color: "#388e3c" }}>Sign Up</Link>
         </div>

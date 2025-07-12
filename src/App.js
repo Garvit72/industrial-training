@@ -16,6 +16,7 @@ function App() {
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState(null);
   const [search, setSearch] = useState("");
+  const [wishlist, setWishlist] = useState([]);
 
   const handleAddToCart = (product) => {
     setCart((prev) => [...prev, product]);
@@ -40,50 +41,22 @@ function App() {
 
   return (
     <Router>
+      {/* Sliding background images */}
+      <div className="background-carousel">
+        <img className="slide" src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=1500&q=80" alt="Medical Shop 1" />
+        <img className="slide" src="https://images.pexels.com/photos/40568/medical-appointment-doctor-healthcare-40568.jpeg" alt="Medical Shop 2" />
+        <img className="slide" src="https://images.pexels.com/photos/593451/pexels-photo-593451.jpeg" alt="Medical Shop 3" />
+      </div>
+      <div className="background-overlay"></div>
       <div className="App">
-        <nav style={{ background: '#4caf50', padding: '10px', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-            <Link to="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold', fontSize: 20 }}>Medical Store</Link>
-            {/* Navigation Links */}
-            <div style={{ display: 'flex', gap: 20 }}>
-               <Link to="/" style={{ color: 'white', textDecoration: 'none', fontWeight: '500' }}>Home</Link>
-               <Link to="/about" style={{ color: 'white', textDecoration: 'none', fontWeight: '500' }}>About</Link>
-               <Link to="/contact" style={{ color: 'white', textDecoration: 'none', fontWeight: '500' }}>Contact</Link>
-            </div>
-            {/* Search Bar */}
-            <input
-              type="text"
-              placeholder="Search medicine..."
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              style={{ padding: '6px 12px', borderRadius: 4, border: 'none', minWidth: 180 }}
-            />
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-            {/* Cart Icon with badge as a link */}
-            <div style={{ position: 'relative', marginRight: 16 }}>
-              <Link to="/cart" style={{ display: 'inline-block' }}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="white" viewBox="0 0 24 24">
-                  <path d="M7 18c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm10 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-12.832-2l1.528-8h15.304l1.528 8h-18.36zm17.832-10h-2.184l-1.724-3.447c-.184-.368-.563-.553-.947-.553h-9.25c-.384 0-.763.185-.947.553l-1.724 3.447h-2.184c-.553 0-1 .447-1 1s.447 1 1 1h1.25l1.716 9.001c.09.474.51.999.999.999h12.07c.489 0 .909-.525.999-.999l1.716-9.001h1.25c.553 0 1-.447 1-1s-.447-1-1-1z"/>
-                </svg>
-                {cart.length > 0 && (
-                  <span style={{ position: 'absolute', top: -6, right: -6, background: 'red', color: 'white', borderRadius: '50%', padding: '2px 7px', fontSize: 12, fontWeight: 'bold' }}>{cart.length}</span>
-                )}
-              </Link>
-            </div>
-            {user ? (
-              <>
-                <span style={{ marginRight: 16 }}>Welcome, {user}!</span>
-                <button onClick={handleLogout} style={{ background: '#fff', color: '#4caf50', border: 'none', padding: '6px 14px', borderRadius: 4, cursor: 'pointer' }}>Logout</button>
-              </>
-            ) : (
-              <>
-                <Link to="/login" style={{ color: 'white', textDecoration: 'underline' }}>Login</Link>
-                <Link to="/signup" style={{ color: 'white', textDecoration: 'underline' }}>Signup</Link>
-              </>
-            )}
-          </div>
-        </nav>
+        <Header
+          cart={cart}
+          user={user}
+          onLogout={handleLogout}
+          search={search}
+          setSearch={setSearch}
+          wishlist={wishlist}
+        />
         <Routes>
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/signup" element={<Signup onSignup={handleSignup} />} />
@@ -150,10 +123,9 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/" element={user ? (
             <>
-              <Header />
               <Banner />
               <Categories onAddToCart={handleAddToCart} search={search} />
-              <FeaturedProducts onAddToCart={handleAddToCart} search={search} />
+              <FeaturedProducts onAddToCart={handleAddToCart} search={search} wishlist={wishlist} setWishlist={setWishlist} />
               <Footer />
             </>
           ) : (
